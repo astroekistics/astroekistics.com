@@ -32,6 +32,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Pages
+      - name: Setup Ruby
+  uses: ruby/setup-ruby@v1
+  with:
+    ruby-version: '3.0'
+
+- name: Install Jekyll and Bundler
+  run: |
+    gem install bundler jekyll
+
+- name: Build Jekyll site
+  run: |
+    bundle exec jekyll build
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
