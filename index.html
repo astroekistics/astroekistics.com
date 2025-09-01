@@ -8,69 +8,158 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <style>
-      :root { --bg1:#0b1222; --bg2:#050914; --bg3:#04070f; }
+      /* ===== Design System ===== */
+      :root{
+        --bg-1:#0b1222; --bg-2:#050914; --bg-3:#04070f;
+        --card:#0f172a;        /* slate-900 */
+        --card-glass: rgba(15,23,42,.55);
+        --border: rgba(148,163,184,.18); /* slate-400 @ low alpha */
+        --ink:#e5ecff;
+        --muted:#cbd5e1;
+        --accent-1:#60a5fa;   /* blue-400 */
+        --accent-2:#a78bfa;   /* violet-400 */
+        --accent-3:#22d3ee;   /* cyan-400 */
+        --shadow: 0 10px 30px rgba(0,0,0,.35);
+        --radius: 16px;
+        --maxw: 1100px;
+      }
       html, body { height:100%; }
       body {
-        margin:0; font-family: system-ui, sans-serif; color:#e5ecff;
-        background:radial-gradient(1200px 600px at 10% 10%, var(--bg1) 0%, var(--bg2) 55%, var(--bg3) 100%);
+        margin:0; color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+        background:radial-gradient(1200px 600px at 10% 10%, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
         overflow-x:hidden;
       }
-      /* Starfield canvas sits behind all content */
-      #starfield {
-        position: fixed; inset: 0; width: 100%; height: 100%;
-        z-index: 0; pointer-events: none; display:block;
+      /* Starfield canvas sits behind content */
+      #starfield { position: fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block; }
+
+      .wrap { position:relative; z-index:1; min-height:100vh; display:grid; grid-template-rows:auto 1fr auto; }
+      .container { width:100%; max-width:var(--maxw); margin:0 auto; padding:28px 24px; }
+
+      /* ===== Header / Hero ===== */
+      header { padding-top:8px; padding-bottom:8px; }
+      .brand { display:flex; align-items:center; gap:14px; }
+      .logo { width:44px; height:44px; object-fit:contain; filter:invert(1) hue-rotate(180deg); opacity:.95 }
+      .title { font-size:1.05rem; font-weight:700; letter-spacing:.02em; opacity:.9 }
+      .hero {
+        margin-top:18px; margin-bottom:26px; position:relative; overflow:hidden;
+        border:1px solid var(--border); border-radius:calc(var(--radius) + 4px);
+        background: linear-gradient(180deg, rgba(17,24,39,.75) 0%, rgba(2,6,23,.55) 100%);
+        box-shadow: var(--shadow);
       }
-      .container { position:relative; z-index:1; min-height:100vh; display:grid; grid-template-rows:auto 1fr auto; gap:20px; padding:24px; }
-      header { text-align:center; }
-      .logo { width:96px; margin:0 auto 8px; filter:invert(1) hue-rotate(180deg); }
-      h1 { margin:0; font-weight:800; font-size:2rem; }
-      .card { background:rgba(17,24,39,0.6); border:1px solid rgba(148,163,184,0.2); border-radius:16px; padding:18px; box-shadow:0 10px 30px rgba(0,0,0,.35); margin-bottom:16px; }
-      h2 { margin-top:0; font-weight:800; }
-      ul { margin:0; padding-left:18px; }
-      .columns { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-      .bullets { display:grid; gap:6px; }
-      footer { text-align:center; opacity:.8; font-size:.9rem; }
-      .badge-ring { position:relative; width:180px; height:180px; margin:12px auto; }
+      .hero-inner { padding:40px 28px; display:grid; grid-template-columns: 1.1fr .9fr; align-items:center; gap:24px; }
+      .kicker { font-size:.85rem; letter-spacing:.12em; color:var(--muted); text-transform:uppercase }
+      h1.hero-h {
+        margin:.1rem 0 .6rem; font-weight:900; line-height:1.08;
+        font-size: clamp(1.8rem, 2.8vw + 1rem, 2.8rem);
+        background: linear-gradient(90deg, var(--ink) 0%, #dbeafe 50%, #e9d5ff 100%);
+        -webkit-background-clip:text; background-clip:text; color:transparent;
+      }
+      .hero-p { margin:0; color:#dbeafe; opacity:.95; font-size:1.05rem }
+      .hero-badge {
+        justify-self:end; border:1px solid var(--border); border-radius:calc(var(--radius) + 2px);
+        padding:20px; background:linear-gradient(180deg, rgba(30,41,59,.55), rgba(2,6,23,.35));
+      }
+
+      /* ===== Cards / Sections ===== */
+      .sections { display:grid; gap:18px; }
+      .card {
+        background:var(--card-glass); border:1px solid var(--border); border-radius:var(--radius);
+        box-shadow:var(--shadow); padding:20px;
+      }
+      .card h2 { margin:0 0 8px; font-weight:900; letter-spacing:.01em; font-size:1.25rem }
+      .subtle { color:var(--muted); margin-top:4px; margin-bottom:16px; font-size:.95rem }
+      .columns { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+      .bullets { margin:0; padding-left:18px; display:grid; gap:8px; }
+      .bullets li { line-height:1.45 }
+
+      /* ===== Badge ===== */
+      .badge-ring { position:relative; width:200px; height:200px; margin:8px auto 10px; }
       .badge-ring svg { position:absolute; inset:0; }
-      .badge-logo { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:92px; filter:invert(1) hue-rotate(180deg); }
-      @media (max-width: 760px){
-        .columns { grid-template-columns: 1fr; }
+      .badge-logo { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:96px; filter:invert(1) hue-rotate(180deg); opacity:.95 }
+      .badge-text { text-align:center }
+      .badge-text .pct { font-weight:900; letter-spacing:.06em; font-size:1rem }
+      .badge-text .label { opacity:.9; font-size:.95rem }
+
+      /* ===== Timeline ===== */
+      .timeline { position:relative; margin-top:8px; }
+      .timeline::before {
+        content:""; position:absolute; left:14px; top:0; bottom:0; width:2px;
+        background:linear-gradient(180deg, rgba(96,165,250,.6), rgba(167,139,250,.6));
+        filter:blur(.15px);
+      }
+      .titem { position:relative; padding-left:42px; margin:16px 0; }
+      .titem::before{
+        content:""; position:absolute; left:8px; top:.2rem; width:12px; height:12px; border-radius:999px;
+        background: radial-gradient(circle at 30% 30%, #fff, #a78bfa 60%, #60a5fa 100%);
+        box-shadow: 0 0 12px rgba(99,102,241,.6);
+      }
+      .titem h3 { margin:.1rem 0 .2rem; font-size:1rem; font-weight:800 }
+      .titem p { margin:0; color:var(--muted) }
+
+      footer { text-align:center; opacity:.75; font-size:.9rem; padding:20px 0 30px }
+
+      @media (max-width: 900px){
+        .hero-inner{ grid-template-columns:1fr; }
+        .hero-badge{ justify-self:stretch }
+      }
+      @media (max-width: 720px){
+        .columns { grid-template-columns:1fr; }
       }
     </style>
   </head>
   <body>
-    <!-- Starfield canvas -->
-    <canvas id="starfield"></canvas>
-
-    <div id="root"></div>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <div id="root" class="wrap"></div>
 
     <script type="text/babel">
-      function PledgeRing({ pct=100, size=180, stroke=12 }) {
+      /* ========= UI Bits ========= */
+      function GradientRule({mt=10, mb=14}) {
+        return (
+          <div style={{
+            marginTop:mt, marginBottom:mb, height:1, width:'100%',
+            background:'linear-gradient(90deg, rgba(96,165,250,.35), rgba(167,139,250,.35))'
+          }}/>
+        );
+      }
+
+      function PledgeRing({ pct=100, size=200, stroke=14 }) {
         const r=(size-stroke)/2; const cx=size/2, cy=size/2; const C=2*Math.PI*r;
         const p=Math.max(0,Math.min(100,Number(pct)||0));
         const dashOffset=C-(p/100)*C;
         const pForAngle=p===100?99.999:p; const angle=(pForAngle/100)*2*Math.PI-Math.PI/2;
         const mx=cx+r*Math.cos(angle); const my=cy+r*Math.sin(angle);
-        return (<svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-          <defs><linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#60a5fa"/><stop offset="100%" stopColor="#a78bfa"/></linearGradient></defs>
-          <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(148,163,184,0.2)" strokeWidth={stroke}/>
-          <circle cx={cx} cy={cy} r={r} fill="none" stroke="url(#ring)" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={C} strokeDashoffset={dashOffset} transform={`rotate(-90 ${cx} ${cy})`}/>
-          <circle cx={mx} cy={my} r={stroke/2.5} fill="#a78bfa" stroke="#0b1222" strokeWidth="2"/>
+        return (<svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={`${p}% commitment`}>
+          <defs>
+            <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#60a5fa"/><stop offset="100%" stopColor="#a78bfa"/>
+            </linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(148,163,184,0.22)" strokeWidth={stroke}/>
+          <circle cx={cx} cy={cy} r={r} fill="none" stroke="url(#ring)" strokeWidth={stroke} strokeLinecap="round"
+                  strokeDasharray={C} strokeDashoffset={dashOffset} transform={`rotate(-90 ${cx} ${cy})`} filter="url(#glow)"/>
+          <circle cx={mx} cy={my} r={stroke/2.4} fill="#a78bfa" stroke="#0b1222" strokeWidth="2"/>
         </svg>);
       }
 
       function PartnerBadge({ pct=100 }) {
         const p=Math.max(0,Math.min(100,Number(pct)||0));
-        return (<div style={{textAlign:'center'}}>
-          <div className="badge-ring">
-            <PledgeRing pct={p}/>
-            <img src="logo.png" alt="Institute logo" className="badge-logo" />
+        return (
+          <div aria-label="Aerospace Commitment Pledge" className="badge-text">
+            <div className="badge-ring">
+              <PledgeRing pct={p}/>
+              <img src="logo.png" alt="Institute logo" className="badge-logo" />
+            </div>
+            <div className="pct">{p}% COMMITTED</div>
+            <div className="label">Aerospace Commitment Pledge</div>
           </div>
-          <div style={{fontWeight:800}}>{p}% COMMITTED</div>
-          <div style={{opacity:.9}}>Aerospace Commitment Pledge</div>
-        </div>);
+        );
       }
 
+      /* ========= Content ========= */
       const MISSION=[
         "Prepare humanity for self-sufficient settlement beyond Earth by creating closed, regenerative life-support systems",
         "Advance ecological resilience on Earth through innovations born from space settlement challenges",
@@ -82,67 +171,128 @@
         "A future where human settlements are ecologically integrated and energy-efficient"
       ];
 
+      function TimelineItem({title, children}) {
+        return (
+          <div className="titem">
+            <h3>{title}</h3>
+            <p>{children}</p>
+          </div>
+        );
+      }
+
       function App(){
         const params=new URLSearchParams(window.location.search);
         const pctParam=parseFloat(params.get('pct'));
         const pct=Number.isFinite(pctParam)?Math.max(0,Math.min(100,pctParam)):100;
-        return (<div className="container">
-          <header>
-            <img className="logo" src="logo.png" alt="logo" />
-            <h1>Institute of Astro-ekistics</h1>
-            <p>Designing ecological systems for life beyond Earth — and strengthening resilience here on Earth.</p>
-          </header>
 
-          <main>
-            <section className="card">
-              <h2>Mission & Vision</h2>
-              <div className="columns">
-                <div><h3>Mission</h3><ul className="bullets">{MISSION.map(m=><li key={m}>{m}</li>)}</ul></div>
-                <div><h3>Vision</h3><ul className="bullets">{VISION.map(v=><li key={v}>{v}</li>)}</ul></div>
-              </div>
-            </section>
+        return (
+          <div className="wrap">
+            <div className="container">
+              <header aria-label="Site header">
+                <div className="brand">
+                  <img className="logo" src="logo.png" alt="Institute of Astro-ekistics logo" />
+                  <div className="title">Institute of Astro-ekistics</div>
+                </div>
+                <section className="hero" aria-label="Hero">
+                  <div className="hero-inner">
+                    <div>
+                      <div className="kicker">Designing for life beyond Earth</div>
+                      <h1 className="hero-h">Ecological Systems for Sustainable Human Settlement</h1>
+                      <p className="hero-p">
+                        We develop closed-loop, regenerative systems that enable self-sufficient life in space—and strengthen ecological resilience on Earth.
+                      </p>
+                      <GradientRule mt={16} mb={0}/>
+                    </div>
+                    <div className="hero-badge">
+                      <PartnerBadge pct={pct}/>
+                    </div>
+                  </div>
+                </section>
+              </header>
 
-            <section className="card">
-              <h2>Astro-ekistics Journal</h2>
-              <p>The Journal of Astro-ekistics is an open-access, hybrid publication. It combines community contributions with volunteer peer review, ensuring both accessibility and credibility. The journal serves as a living record of progress in ecological settlement sciences, documenting research in regenerative agriculture, closed-loop habitats, analogue settlements, and sustainable technologies.</p>
-            </section>
+              <main className="sections">
+                <section className="card" aria-labelledby="mv">
+                  <h2 id="mv">Mission & Vision</h2>
+                  <p className="subtle">Clarity of purpose, openness of method.</p>
+                  <div className="columns">
+                    <div>
+                      <h3>Mission</h3>
+                      <ul className="bullets">{MISSION.map(m=><li key={m}>{m}</li>)}</ul>
+                    </div>
+                    <div>
+                      <h3>Vision</h3>
+                      <ul className="bullets">{VISION.map(v=><li key={v}>{v}</li>)}</ul>
+                    </div>
+                  </div>
+                </section>
 
-            <section className="card">
-              <h2>Transparency & Licensing</h2>
-              <p>Transparency is at the core of the Institute’s work. All outputs — from data and designs to software and hardware — are released under strong copyleft licenses. This ensures that every discovery remains in the public domain: articles under Creative Commons BY-SA, software under GNU GPL/AGPL, and hardware under CERN OHL. The goal is to prevent privatization and guarantee that our work remains a shared commons for humanity.</p>
-            </section>
+                <section className="card" aria-labelledby="journal">
+                  <h2 id="journal">Astro-ekistics Journal</h2>
+                  <p>
+                    An open-access, hybrid publication combining community contribution with volunteer peer review.
+                    A living record of ecological settlement science—from regenerative agriculture and closed habitats
+                    to analogue settlement research and sustainable technologies.
+                  </p>
+                </section>
 
-            <section className="card">
-              <h2>Funding & Governance</h2>
-              <p>Initial support comes from aerospace partners and private donors, expanding over time to include research grants and mission-aligned revenue. Governance is handled through board oversight, with transparent compensation and a Primary Investigator model for managing research budgets. This ensures accountability, efficiency, and alignment with our mission of sustainable settlement.</p>
-            </section>
+                <section className="card" aria-labelledby="transparency">
+                  <h2 id="transparency">Transparency & Licensing</h2>
+                  <p>
+                    We release all outputs under strong copyleft licenses to protect the commons:
+                    articles under Creative Commons BY-SA, software under GNU GPL/AGPL, and hardware under CERN OHL.
+                    This keeps discoveries open, verifiable, and reusable.
+                  </p>
+                </section>
 
-            <section className="card">
-              <h2>Roadmap</h2>
-              <p>The Institute follows a phased development plan to ensure steady progress:</p>
-              <ul className="bullets">
-                <li><strong>Year 1:</strong> Incorporation, nonprofit filing, launch of the open-access research database, and journal framework.</li>
-                <li><strong>Year 2:</strong> Publication of the first journal issue, initiation of pilot projects, and analogue settlement design.</li>
-                <li><strong>Year 3:</strong> Construction of test modules for analogue settlements, hosting the first interns, and holding a public workshop.</li>
-                <li><strong>Years 4–5:</strong> Expanded analogue settlement with live-in research, formal partnerships with universities, pursuit of federal research grants, and adaptation of educational materials from research results.</li>
-              </ul>
-            </section>
+                <section className="card" aria-labelledby="governance">
+                  <h2 id="governance">Funding & Governance</h2>
+                  <p>
+                    Early support comes from aerospace partners and private donors, growing into grants and mission-aligned revenue.
+                    A board-oversight and Principal Investigator model ensures accountability and alignment with our mission.
+                  </p>
+                </section>
 
-            <section className="card">
-              <h2>Industry Partner Badge</h2>
-              <PartnerBadge pct={pct}/>
-              <p style={{marginTop:12}}>The Aerospace Commitment Pledge Seal recognizes companies that commit a percentage of their annual charitable contributions to the Institute. Displaying this seal signals real, verifiable dedication to advancing sustainable human settlement and ecological resilience. While partners may pledge different levels, the ultimate goal is a future where every aerospace company dedicates <strong>100%</strong> of its giving to humanity’s survival across worlds.</p>
-            </section>
-          </main>
+                <section className="card" aria-labelledby="roadmap">
+                  <h2 id="roadmap">Roadmap</h2>
+                  <div className="timeline">
+                    <TimelineItem title="Year 1">
+                      Incorporation, nonprofit filing, open database launch, and journal framework.
+                    </TimelineItem>
+                    <TimelineItem title="Year 2">
+                      First journal issue, pilot projects, analogue settlement design.
+                    </TimelineItem>
+                    <TimelineItem title="Year 3">
+                      Test modules for analogue settlements, first interns, public workshop.
+                    </TimelineItem>
+                    <TimelineItem title="Years 4–5">
+                      Expanded analogue settlement with live-in research, university partnerships, federal research grants.
+                    </TimelineItem>
+                  </div>
+                </section>
 
-          <footer>© {new Date().getFullYear()} Institute of Astro-ekistics</footer>
-        </div>);
+                <section className="card" aria-labelledby="badge">
+                  <h2 id="badge">Industry Partner Badge</h2>
+                  <div style={{display:'grid', placeItems:'center', paddingTop:8, paddingBottom:4}}>
+                    <PartnerBadge pct={pct}/>
+                  </div>
+                  <p style={{marginTop:10}}>
+                    The Aerospace Commitment Pledge Seal recognizes companies that commit a percentage of their annual
+                    charitable contributions to the Institute—transparent, verifiable dedication to sustainable human
+                    settlement and ecological resilience.
+                  </p>
+                </section>
+              </main>
+
+              <footer>© {new Date().getFullYear()} Institute of Astro-ekistics</footer>
+            </div>
+          </div>
+        );
       }
 
       ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
     </script>
 
-    <!-- Tiny, efficient starfield animator -->
+    <!-- Starfield (parallax + twinkle) -->
     <script>
       (function(){
         const canvas = document.getElementById('starfield');
@@ -154,7 +304,6 @@
           { speed: 0.05, size: [0.8, 1.6], density: 0.00007, alpha: 0.7 }, // mid
           { speed: 0.10, size: [1.2, 2.2], density: 0.00005, alpha: 0.9 }  // near
         ];
-
         function rand(a,b){ return a + Math.random()*(b-a); }
 
         function resize(){
@@ -181,7 +330,7 @@
                 speed: L.speed * (1 + Math.random()*0.4),
                 alpha: L.alpha * rand(0.7, 1.0),
                 layer: idx,
-                tw: Math.random()*Math.PI*2, // twinkle phase
+                tw: Math.random()*Math.PI*2,
                 twRate: rand(0.002, 0.006)
               });
             }
@@ -190,46 +339,30 @@
 
         let last=0, driftX=0.02, driftY=-0.005;
         function frame(ts){
-          const dt = Math.min(32, ts - last || 16); // clamp delta for stability
+          const dt = Math.min(32, ts - last || 16);
           last = ts;
-
           ctx.clearRect(0,0,w,h);
 
-          // very subtle background vignette to blend with CSS gradient
           const g = ctx.createRadialGradient(w*0.1, h*0.1, 0, w*0.1, h*0.1, Math.max(w,h));
           g.addColorStop(0, 'rgba(11,18,34,0.0)');
           g.addColorStop(1, 'rgba(4,7,15,0.12)');
-          ctx.fillStyle = g;
-          ctx.fillRect(0,0,w,h);
+          ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
 
           for(const s of stars){
-            // parallax drift
             s.x += (s.speed + driftX) * dt;
             s.y += (driftY * (s.layer+1)) * dt;
-
-            // wrap around edges
-            if(s.x > w) s.x -= w;
-            if(s.x < 0) s.x += w;
-            if(s.y > h) s.y -= h;
-            if(s.y < 0) s.y += h;
-
-            // twinkle
-            s.tw += s.twRate * dt;
-            const twinkle = 0.75 + 0.25 * Math.sin(s.tw);
-
+            if(s.x > w) s.x -= w; if(s.x < 0) s.x += w;
+            if(s.y > h) s.y -= h; if(s.y < 0) s.y += h;
+            s.tw += s.twRate * dt; const twinkle = 0.75 + 0.25 * Math.sin(s.tw);
             ctx.globalAlpha = s.alpha * twinkle;
-            ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-            ctx.fillStyle = '#e5ecff';
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+            ctx.fillStyle = '#e5ecff'; ctx.fill();
           }
           ctx.globalAlpha = 1;
           requestAnimationFrame(frame);
         }
-
         window.addEventListener('resize', resize, { passive:true });
-        resize();
-        requestAnimationFrame(frame);
+        resize(); requestAnimationFrame(frame);
       })();
     </script>
   </body>
