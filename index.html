@@ -8,8 +8,19 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <style>
-      body { margin:0; font-family: system-ui, sans-serif; color:#e5ecff; background:radial-gradient(1200px 600px at 10% 10%,#0b1222 0%,#050914 55%,#04070f 100%); }
-      .container { min-height:100vh; display:grid; grid-template-rows:auto 1fr auto; gap:20px; padding:24px; }
+      :root { --bg1:#0b1222; --bg2:#050914; --bg3:#04070f; }
+      html, body { height:100%; }
+      body {
+        margin:0; font-family: system-ui, sans-serif; color:#e5ecff;
+        background:radial-gradient(1200px 600px at 10% 10%, var(--bg1) 0%, var(--bg2) 55%, var(--bg3) 100%);
+        overflow-x:hidden;
+      }
+      /* Starfield canvas sits behind all content */
+      #starfield {
+        position: fixed; inset: 0; width: 100%; height: 100%;
+        z-index: 0; pointer-events: none; display:block;
+      }
+      .container { position:relative; z-index:1; min-height:100vh; display:grid; grid-template-rows:auto 1fr auto; gap:20px; padding:24px; }
       header { text-align:center; }
       .logo { width:96px; margin:0 auto 8px; filter:invert(1) hue-rotate(180deg); }
       h1 { margin:0; font-weight:800; font-size:2rem; }
@@ -22,10 +33,17 @@
       .badge-ring { position:relative; width:180px; height:180px; margin:12px auto; }
       .badge-ring svg { position:absolute; inset:0; }
       .badge-logo { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:92px; filter:invert(1) hue-rotate(180deg); }
+      @media (max-width: 760px){
+        .columns { grid-template-columns: 1fr; }
+      }
     </style>
   </head>
   <body>
+    <!-- Starfield canvas -->
+    <canvas id="starfield"></canvas>
+
     <div id="root"></div>
+
     <script type="text/babel">
       function PledgeRing({ pct=100, size=180, stroke=12 }) {
         const r=(size-stroke)/2; const cx=size/2, cy=size/2; const C=2*Math.PI*r;
@@ -122,6 +140,97 @@
       }
 
       ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+
+    <!-- Tiny, efficient starfield animator -->
+    <script>
+      (function(){
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        let w=0, h=0, dpr=1, stars=[];
+        const layers = [
+          { speed: 0.02, size: [0.4, 1.0], density: 0.00010, alpha: 0.5 }, // far
+          { speed: 0.05, size: [0.8, 1.6], density: 0.00007, alpha: 0.7 }, // mid
+          { speed: 0.10, size: [1.2, 2.2], density: 0.00005, alpha: 0.9 }  // near
+        ];
+
+        function rand(a,b){ return a + Math.random()*(b-a); }
+
+        function resize(){
+          const { innerWidth, innerHeight, devicePixelRatio } = window;
+          dpr = Math.min(2, devicePixelRatio || 1);
+          w = innerWidth; h = innerHeight;
+          canvas.width = Math.floor(w * dpr);
+          canvas.height = Math.floor(h * dpr);
+          canvas.style.width = w + 'px';
+          canvas.style.height = h + 'px';
+          ctx.setTransform(dpr,0,0,dpr,0,0);
+          initStars();
+        }
+
+        function initStars(){
+          stars = [];
+          layers.forEach((L, idx) => {
+            const count = Math.ceil(w * h * L.density);
+            for(let i=0;i<count;i++){
+              stars.push({
+                x: Math.random()*w,
+                y: Math.random()*h,
+                r: rand(L.size[0], L.size[1]),
+                speed: L.speed * (1 + Math.random()*0.4),
+                alpha: L.alpha * rand(0.7, 1.0),
+                layer: idx,
+                tw: Math.random()*Math.PI*2, // twinkle phase
+                twRate: rand(0.002, 0.006)
+              });
+            }
+          });
+        }
+
+        let last=0, driftX=0.02, driftY=-0.005;
+        function frame(ts){
+          const dt = Math.min(32, ts - last || 16); // clamp delta for stability
+          last = ts;
+
+          ctx.clearRect(0,0,w,h);
+
+          // very subtle background vignette to blend with CSS gradient
+          const g = ctx.createRadialGradient(w*0.1, h*0.1, 0, w*0.1, h*0.1, Math.max(w,h));
+          g.addColorStop(0, 'rgba(11,18,34,0.0)');
+          g.addColorStop(1, 'rgba(4,7,15,0.12)');
+          ctx.fillStyle = g;
+          ctx.fillRect(0,0,w,h);
+
+          for(const s of stars){
+            // parallax drift
+            s.x += (s.speed + driftX) * dt;
+            s.y += (driftY * (s.layer+1)) * dt;
+
+            // wrap around edges
+            if(s.x > w) s.x -= w;
+            if(s.x < 0) s.x += w;
+            if(s.y > h) s.y -= h;
+            if(s.y < 0) s.y += h;
+
+            // twinkle
+            s.tw += s.twRate * dt;
+            const twinkle = 0.75 + 0.25 * Math.sin(s.tw);
+
+            ctx.globalAlpha = s.alpha * twinkle;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+            ctx.fillStyle = '#e5ecff';
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          requestAnimationFrame(frame);
+        }
+
+        window.addEventListener('resize', resize, { passive:true });
+        resize();
+        requestAnimationFrame(frame);
+      })();
     </script>
   </body>
 </html>
