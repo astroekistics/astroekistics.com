@@ -1,1 +1,0 @@
-# astroekistics.com

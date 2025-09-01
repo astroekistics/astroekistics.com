@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Institute of Astro-ekistics</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+      body { margin:0; font-family: system-ui, sans-serif; color:#e5ecff; background:radial-gradient(1200px 600px at 10% 10%,#0b1222 0%,#050914 55%,#04070f 100%); }
+      .container { min-height:100vh; display:grid; grid-template-rows:auto 1fr auto; gap:20px; padding:24px; }
+      header { text-align:center; }
+      .logo { width:96px; margin:0 auto 8px; filter:invert(1) hue-rotate(180deg); }
+      h1 { margin:0; font-weight:800; font-size:2rem; }
+      .card { background:rgba(17,24,39,0.6); border:1px solid rgba(148,163,184,0.2); border-radius:16px; padding:18px; box-shadow:0 10px 30px rgba(0,0,0,.35); margin-bottom:16px; }
+      h2 { margin-top:0; font-weight:800; }
+      ul { margin:0; padding-left:18px; }
+      .columns { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+      .bullets { display:grid; gap:6px; }
+      footer { text-align:center; opacity:.8; font-size:.9rem; }
+      .badge-ring { position:relative; width:180px; height:180px; margin:12px auto; }
+      .badge-ring svg { position:absolute; inset:0; }
+      .badge-logo { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:92px; filter:invert(1) hue-rotate(180deg); }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function PledgeRing({ pct=100, size=180, stroke=12 }) {
+        const r=(size-stroke)/2; const cx=size/2, cy=size/2; const C=2*Math.PI*r;
+        const p=Math.max(0,Math.min(100,Number(pct)||0));
+        const dashOffset=C-(p/100)*C;
+        const pForAngle=p===100?99.999:p; const angle=(pForAngle/100)*2*Math.PI-Math.PI/2;
+        const mx=cx+r*Math.cos(angle); const my=cy+r*Math.sin(angle);
+        return (<svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+          <defs><linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#60a5fa"/><stop offset="100%" stopColor="#a78bfa"/></linearGradient></defs>
+          <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(148,163,184,0.2)" strokeWidth={stroke}/>
+          <circle cx={cx} cy={cy} r={r} fill="none" stroke="url(#ring)" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={C} strokeDashoffset={dashOffset} transform={`rotate(-90 ${cx} ${cy})`}/>
+          <circle cx={mx} cy={my} r={stroke/2.5} fill="#a78bfa" stroke="#0b1222" strokeWidth="2"/>
+        </svg>);
+      }
+
+      function PartnerBadge({ pct=100 }) {
+        const p=Math.max(0,Math.min(100,Number(pct)||0));
+        return (<div style={{textAlign:'center'}}>
+          <div className="badge-ring">
+            <PledgeRing pct={p}/>
+            <img src="logo.png" alt="Institute logo" className="badge-logo" />
+          </div>
+          <div style={{fontWeight:800}}>{p}% COMMITTED</div>
+          <div style={{opacity:.9}}>Aerospace Commitment Pledge</div>
+        </div>);
+      }
+
+      const MISSION=[
+        "Prepare humanity for self-sufficient settlement beyond Earth by creating closed, regenerative life-support systems",
+        "Advance ecological resilience on Earth through innovations born from space settlement challenges",
+        "Ensure all research and designs are transparent, collaborative, and openly shared"
+      ];
+      const VISION=[
+        "Space as the ultimate test of sustainability and efficiency",
+        "Global access to knowledge that improves resilience both in orbit and on Earth",
+        "A future where human settlements are ecologically integrated and energy-efficient"
+      ];
+
+      function App(){
+        const params=new URLSearchParams(window.location.search);
+        const pctParam=parseFloat(params.get('pct'));
+        const pct=Number.isFinite(pctParam)?Math.max(0,Math.min(100,pctParam)):100;
+        return (<div className="container">
+          <header>
+            <img className="logo" src="logo.png" alt="logo" />
+            <h1>Institute of Astro-ekistics</h1>
+            <p>Designing ecological systems for life beyond Earth — and strengthening resilience here on Earth.</p>
+          </header>
+
+          <main>
+            <section className="card">
+              <h2>Mission & Vision</h2>
+              <div className="columns">
+                <div><h3>Mission</h3><ul className="bullets">{MISSION.map(m=><li key={m}>{m}</li>)}</ul></div>
+                <div><h3>Vision</h3><ul className="bullets">{VISION.map(v=><li key={v}>{v}</li>)}</ul></div>
+              </div>
+            </section>
+
+            <section className="card">
+              <h2>Astro-ekistics Journal</h2>
+              <p>The Journal of Astro-ekistics is an open-access, hybrid publication. It combines community contributions with volunteer peer review, ensuring both accessibility and credibility. The journal serves as a living record of progress in ecological settlement sciences, documenting research in regenerative agriculture, closed-loop habitats, analogue settlements, and sustainable technologies.</p>
+            </section>
+
+            <section className="card">
+              <h2>Transparency & Licensing</h2>
+              <p>Transparency is at the core of the Institute’s work. All outputs — from data and designs to software and hardware — are released under strong copyleft licenses. This ensures that every discovery remains in the public domain: articles under Creative Commons BY-SA, software under GNU GPL/AGPL, and hardware under CERN OHL. The goal is to prevent privatization and guarantee that our work remains a shared commons for humanity.</p>
+            </section>
+
+            <section className="card">
+              <h2>Funding & Governance</h2>
+              <p>Initial support comes from aerospace partners and private donors, expanding over time to include research grants and mission-aligned revenue. Governance is handled through board oversight, with transparent compensation and a Primary Investigator model for managing research budgets. This ensures accountability, efficiency, and alignment with our mission of sustainable settlement.</p>
+            </section>
+
+            <section className="card">
+              <h2>Roadmap</h2>
+              <p>The Institute follows a phased development plan to ensure steady progress:</p>
+              <ul className="bullets">
+                <li><strong>Year 1:</strong> Incorporation, nonprofit filing, launch of the open-access research database, and journal framework.</li>
+                <li><strong>Year 2:</strong> Publication of the first journal issue, initiation of pilot projects, and analogue settlement design.</li>
+                <li><strong>Year 3:</strong> Construction of test modules for analogue settlements, hosting the first interns, and holding a public workshop.</li>
+                <li><strong>Years 4–5:</strong> Expanded analogue settlement with live-in research, formal partnerships with universities, pursuit of federal research grants, and adaptation of educational materials from research results.</li>
+              </ul>
+            </section>
+
+            <section className="card">
+              <h2>Industry Partner Badge</h2>
+              <PartnerBadge pct={pct}/>
+              <p style={{marginTop:12}}>The Aerospace Commitment Pledge Seal recognizes companies that commit a percentage of their annual charitable contributions to the Institute. Displaying this seal signals real, verifiable dedication to advancing sustainable human settlement and ecological resilience. While partners may pledge different levels, the ultimate goal is a future where every aerospace company dedicates <strong>100%</strong> of its giving to humanity’s survival across worlds.</p>
+            </section>
+          </main>
+
+          <footer>© {new Date().getFullYear()} Institute of Astro-ekistics</footer>
+        </div>);
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+  </body>
+</html>
