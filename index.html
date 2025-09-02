@@ -266,16 +266,17 @@
 
       /* ========= Content ========= */
       const MISSION = [
-        "Develop and share regenerative life-support systems for human settlement beyond Earth.",
-        "Translate space-grade efficiency into tools that strengthen ecological resilience on Earth.",
-        "Ensure every discovery remains open, collaborative, and verifiable."
+        "Advance regenerative, closed-loop life-support systems for human settlement beyond Earth.",
+        "Apply space-grade efficiency to strengthen ecological resilience on Earth.",
+        "Publish all research openly to ensure discoveries remain collaborative, verifiable, and reusable."
       ];
 
       const VISION = [
-        "Space as the ultimate proving ground for sustainability.",
-        "Knowledge that is public, transparent, and globally accessible.",
-        "Human settlements that are ecologically integrated and energy-efficient from first principles."
+        "Space as the ultimate laboratory for sustainability and resilience.",
+        "Knowledge that is open, transparent, and accessible to all.",
+        "Human settlements designed to be ecologically integrated and energy-efficient from the start."
       ];
+
 
       function TimelineItem({title, children}) {
         return (
@@ -373,13 +374,15 @@
                 <section className="hero" aria-label="Hero">
                   <div className="hero-inner">
                     <div>
-                      <div className="kicker">Designing for life beyond Earth</div>
-                      <h1 className="hero-h">Sustainable Systems for Human Settlement</h1>
-                      <p className="hero-p">
-                        A foundation for life that endures — on Earth and at the frontier.
-                      </p>
-                      <GradientRule mt={16} mb={0}/>
-                    </div>
+                    <div className="kicker">Designing for life beyond Earth</div>
+                    <h1 className="hero-h">
+                      Building Sustainable Systems for Human Settlement
+                    </h1>
+                    <p className="hero-p" style={{fontSize:"1.15rem", lineHeight:"1.5", maxWidth:"38ch", marginTop:"12px"}}>
+                      A foundation for life that endures — on Earth and at the frontier.
+                    </p>
+                    <GradientRule mt={24} mb={0}/>
+                  </div>
 
                     <div className="hero-badge">
                       <PartnerBadge pct={pct}/>
@@ -405,29 +408,93 @@
                 </section>
 
                 <section className="card" aria-labelledby="journal">
-                  <h2 id="journal">Astro-ekistics Journal</h2>
+                  <h2 id="journal">Astro-ekistics</h2>
                   <p>
-                    The Journal of Astro-ekistics is an open-access, hybrid publication that welcomes community submissions and marks peer-reviewed work clearly. It serves as a living record of ecological settlement science—from regenerative agriculture and closed-loop habitats to analogue settlements and enabling technologies.
+                    <em>Astro-ekistics</em> is an open-access, hybrid journal that combines community contributions
+                    with volunteer peer review. It serves as a living record of settlement science—covering
+                    regenerative agriculture, closed-loop habitats, analogue settlements, and enabling technologies.
+                  </p>
+                  <p>
+                    Its purpose is to make frontier research accessible, verifiable, and citable—ensuring knowledge
+                    developed for life beyond Earth strengthens resilience on Earth as well.
+                  </p>
+
+                  {/* Badge line */}
+                  <div style={{display:"flex", alignItems:"center", flexWrap:"wrap", gap:"14px", marginTop:"14px"}}>
+                    <div style={{display:"flex", alignItems:"center", gap:"6px"}}>
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Open_Access_logo_PLoS_white.svg"
+                          alt="Open Access logo" style={{height:"22px"}}/>
+                      <span>Open Access</span>
+                    </div>
+                    <div style={{display:"flex", alignItems:"center", gap:"6px"}}>
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/DOI_logo.svg"
+                          alt="DOI logo" style={{height:"22px"}}/>
+                      <span>DOI registered</span>
+                    </div>
+                    <div style={{display:"flex", alignItems:"center", gap:"6px"}}>
+                      <img src="https://assets.crossref.org/logo/crossref-logo-landscape-200.svg"
+                          alt="Crossref logo" style={{height:"22px"}}/>
+                      <span>Crossref indexed</span>
+                    </div>
+                    <div style={{display:"flex", alignItems:"center", gap:"6px"}}>
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/ORCID_iD.svg"
+                          alt="ORCID logo" style={{height:"22px"}}/>
+                      <span>ORCID linked</span>
+                    </div>
+                  </div>
+
+                  {/* Etymology note */}
+                  <p className="subtle" style={{marginTop:"14px", fontSize:".9rem", fontStyle:"italic"}}>
+                    <strong>Etymology:</strong> “Ekistics” comes from the Greek <em>oikos</em>, meaning dwelling or
+                    household, and refers to the science of human settlement. <em>Astro-ekistics</em> extends this
+                    study to the frontier of space.
                   </p>
                 </section>
+
+
+
 
                 <section className="card" aria-labelledby="transparency">
                   <h2 id="transparency">Transparency & Licensing</h2>
                   <p>
                     Transparency is core to our work. All outputs remain in the commons:
-                    articles and datasets under <strong>CC BY-SA</strong>, software under
-                    <strong>GNU GPL/AGPL</strong>, and hardware &amp; habitat designs under
-                    <strong>CERN OHL</strong>. Strong copyleft keeps the work accessible,
-                    auditable, and reusable—preventing enclosure and ensuring public benefit.
+                  </p>
+                  <ul className="bullets">
+                    <li>
+                      <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-sa.svg" 
+                          alt="CC BY-SA icon" style={{height:"20px",marginRight:"6px",verticalAlign:"middle"}}/>
+                      Articles &amp; datasets — <strong>Creative Commons BY-SA</strong>
+                    </li>
+                    <li>
+                      <img src="https://www.gnu.org/graphics/gplv3-127x51.png" 
+                          alt="GNU GPL icon" style={{height:"20px",marginRight:"6px",verticalAlign:"middle"}}/>
+                      Software — <strong>GNU GPL / AGPL</strong>
+                    </li>
+                    <li>
+                     Hardware &amp; habitat designs — <strong>CERN OHL</strong>
+                    </li>
+                  </ul>
+                  <p>
+                    Strong copyleft keeps the work accessible, auditable, and reusable — preventing enclosure
+                    and ensuring long-term public benefit.
                   </p>
                 </section>
 
                 <section className="card" aria-labelledby="governance">
-                  <h2 id="governance">Funding & Governance</h2>
+                  <h2 id="governance">Funding &amp; Governance</h2>
                   <p>
-                    Early support comes from aerospace partners and private donors, expanding to foundation and federal research grants. Governance follows a Principal Investigator model with board-approved budgets to keep spending accountable and aligned with outcomes.
+                    Early support comes from mission-aligned aerospace partners and private donors, with future
+                    growth driven by foundation and federal research grants. All resources are directed toward
+                    open research and settlement development, not profit.
+                  </p>
+                  <p>
+                    Governance follows a <strong>Principal Investigator model</strong>, where project leads manage
+                    research budgets under board oversight. Budgets are reviewed and approved at the board level
+                    to ensure accountability, transparency, and alignment with the Institute’s mission of
+                    sustainable human settlement.
                   </p>
                 </section>
+
 
                 <section className="card" aria-labelledby="roadmap">
                   <h2 id="roadmap">Roadmap</h2>
