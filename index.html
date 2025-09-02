@@ -2,34 +2,97 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Institute of Astro-ekistics</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+
+    <title>Institute of Astro-ekistics — Sustainable Systems for Human Settlement</title>
+
+    <!-- Primary SEO -->
+    <meta
+      name="description"
+      content="We design closed-loop, regenerative systems that enable self-sufficient life in space — and deliver practical resilience here on Earth."
+    />
+    <link rel="canonical" href="https://astroekistics.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://astroekistics.com/" />
+    <meta
+      property="og:title"
+      content="Institute of Astro-ekistics — Sustainable Systems for Human Settlement"
+    />
+    <meta
+      property="og:description"
+      content="Closed-loop, regenerative systems for self-sufficient life in space and practical resilience on Earth."
+    />
+    <meta property="og:image" content="logo.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@astroekistics" />
+    <meta
+      name="twitter:title"
+      content="Institute of Astro-ekistics — Sustainable Systems for Human Settlement"
+    />
+    <meta
+      name="twitter:description"
+      content="Closed-loop, regenerative systems for self-sufficient life in space and practical resilience on Earth."
+    />
+    <meta name="twitter:image" content="logo.png" />
+
+    <!-- Basic PWA-ish niceties -->
+    <meta name="theme-color" content="#0b1222" />
+    <link rel="icon" href="logo.png" />
+
+    <!-- JSON-LD (Organization + Website) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Institute of Astro-ekistics",
+      "url": "https://astroekistics.com/",
+      "logo": "https://astroekistics.com/logo.png",
+      "sameAs": []
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Institute of Astro-ekistics",
+      "url": "https://astroekistics.com/"
+    }
+    </script>
+
+    <!-- React + Babel (CDN) -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
     <style>
       /* ===== Design System ===== */
       :root{
         --bg-1:#0b1222; --bg-2:#050914; --bg-3:#04070f;
-        --card:#0f172a;        /* slate-900 */
+        --card:#0f172a;
         --card-glass: rgba(15,23,42,.55);
-        --border: rgba(148,163,184,.18); /* slate-400 @ low alpha */
-        --ink:#e5ecff;
-        --muted:#cbd5e1;
-        --accent-1:#60a5fa;   /* blue-400 */
-        --accent-2:#a78bfa;   /* violet-400 */
-        --accent-3:#22d3ee;   /* cyan-400 */
+        --border: rgba(148,163,184,.18);
+        --ink:#e5ecff; --muted:#cbd5e1;
+        --accent-1:#60a5fa; --accent-2:#a78bfa; --accent-3:#22d3ee;
         --shadow: 0 10px 30px rgba(0,0,0,.35);
         --radius: 16px;
         --maxw: 1100px;
       }
       html, body { height:100%; }
       body {
-        margin:0; color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+        margin:0; color:var(--ink);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
         background:radial-gradient(1200px 600px at 10% 10%, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
         overflow-x:hidden;
       }
-      /* Starfield canvas sits behind content */
+
+      /* Starfield canvas behind content */
       #starfield { position: fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block; }
 
       .wrap { position:relative; z-index:1; min-height:100vh; display:grid; grid-template-rows:auto 1fr auto; }
@@ -105,6 +168,43 @@
       @media (max-width: 720px){
         .columns { grid-template-columns:1fr; }
       }
+      /* Partners grid (no fancy JS features needed) */
+      .partner-grid { 
+        display:grid; gap:14px; 
+        grid-template-columns: repeat( auto-fill, minmax(160px, 1fr) );
+      }
+      .partner-card {
+        border:1px solid var(--border);
+        border-radius:12px;
+        background: rgba(15,23,42,.45);
+        padding:14px;
+        display:grid; gap:10px;
+        align-content:start;
+        transition: transform .12s ease, box-shadow .12s ease;
+      }
+      .partner-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+      .partner-logo-wrap {
+        width:100%; aspect-ratio: 4/3; 
+        display:grid; place-items:center;
+        background: rgba(148,163,184,.08);
+        border-radius:10px;
+        overflow:hidden;
+      }
+      .partner-logo { max-width: 90%; max-height: 80%; object-fit: contain; }
+      .partner-fallback {
+        font-weight:800; font-size:1.1rem; opacity:.85;
+        display:grid; place-items:center; width:100%; height:100%;
+      }
+      .partner-meta {
+        display:flex; align-items:center; justify-content:space-between; gap:8px;
+        min-height: 28px;
+      }
+      .partner-name { font-size:.95rem; font-weight:700; line-height:1.2; }
+      .partner-pct {
+        font-size:.8rem; padding:.15rem .45rem; border-radius:999px;
+        border:1px solid var(--border); opacity:.9;
+      }
+
     </style>
   </head>
   <body>
@@ -146,29 +246,35 @@
       }
 
       function PartnerBadge({ pct=100 }) {
-        const p=Math.max(0,Math.min(100,Number(pct)||0));
+        const p = Math.max(0, Math.min(100, Number(pct) || 0));
         return (
-          <div aria-label="Aerospace Commitment Pledge" className="badge-text">
+          <div aria-label="Patron Seal of Astro-ekistics" className="badge-text">
             <div className="badge-ring">
               <PledgeRing pct={p}/>
-              <img src="logo.png" alt="Institute logo" className="badge-logo" />
+              <img 
+                src="logo.png" 
+                alt="Institute logo" 
+                className="badge-logo" 
+                style={{ width: "166px" }}  // increased from 96px → 120px
+              />
             </div>
             <div className="pct">{p}% COMMITTED</div>
-            <div className="label">Aerospace Commitment Pledge</div>
+            <div className="label">Patron Seal of Astro-ekistics</div>
           </div>
         );
       }
 
       /* ========= Content ========= */
-      const MISSION=[
-        "Prepare humanity for self-sufficient settlement beyond Earth by creating closed, regenerative life-support systems",
-        "Advance ecological resilience on Earth through innovations born from space settlement challenges",
-        "Ensure all research and designs are transparent, collaborative, and openly shared"
+      const MISSION = [
+        "Develop and share regenerative life-support systems for human settlement beyond Earth.",
+        "Translate space-grade efficiency into tools that strengthen ecological resilience on Earth.",
+        "Ensure every discovery remains open, collaborative, and verifiable."
       ];
-      const VISION=[
-        "Space as the ultimate test of sustainability and efficiency",
-        "Global access to knowledge that improves resilience both in orbit and on Earth",
-        "A future where human settlements are ecologically integrated and energy-efficient"
+
+      const VISION = [
+        "Space as the ultimate proving ground for sustainability.",
+        "Knowledge that is public, transparent, and globally accessible.",
+        "Human settlements that are ecologically integrated and energy-efficient from first principles."
       ];
 
       function TimelineItem({title, children}) {
@@ -179,6 +285,77 @@
           </div>
         );
       }
+      /* ===== Partners (no fetch, ES5-safe) ===== */
+      const PARTNERS = [
+        { name: "Blackstar Orbital", url: "https://spacedrone.io", logo: "https://static.wixstatic.com/media/17753f_7c20ca17a0c048038c4ecd17dfd7379a~mv2.png/v1/fill/w_77,h_77,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo%20OffWhite%20-%20Transparent.png", pct: 15 },
+      ];
+
+      function initialsOf(name){
+        if(!name) return "";
+        var parts = String(name).replace(/^\s+|\s+$/g,"").split(/\s+/).slice(0,2);
+        for (var i=0;i<parts.length;i++){
+          parts[i] = parts[i] && parts[i].charAt(0) ? parts[i].charAt(0).toUpperCase() : "";
+        }
+        return parts.join("");
+      }
+
+      function PartnerLogo(props){
+        var name = props.name, src = props.src;
+        var _ref = React.useRef(null);
+        var _failed = React.useRef(false);
+
+        React.useEffect(function(){
+          // if image failed earlier and React re-rendered, show fallback
+          if(_failed.current && _ref.current){
+            _ref.current.innerHTML = '<div class="partner-fallback">' + initialsOf(name) + '</div>';
+          }
+        });
+
+        function onErr(e){
+          _failed.current = true;
+          if(_ref.current){
+            _ref.current.innerHTML = '<div class="partner-fallback">' + initialsOf(name) + '</div>';
+          }
+        }
+
+        return (
+          <div className="partner-logo-wrap" ref={_ref}>
+            <img className="partner-logo" src={src} alt={name + " logo"} onError={onErr}/>
+          </div>
+        );
+      }
+
+      function PartnerGrid(){
+        return (
+          <div className="partner-grid">
+            {PARTNERS.map(function(p, i){
+              var hasPct = typeof p.pct === "number" && isFinite(p.pct);
+              return (
+                <a
+                  key={p.name + i}
+                  className="partner-card"
+                  href={p.url || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={p.name + (hasPct ? (" — " + p.pct + "% committed") : "")}
+                  title={p.name}
+                >
+                  <PartnerLogo name={p.name} src={p.logo} />
+                  <div className="partner-meta">
+                    <div className="partner-name">{p.name}</div>
+                    {hasPct ? (
+                      <div className="partner-pct">{p.pct}%</div>
+                    ) : (
+                      <div style={{opacity:.6, fontSize:".8rem"}}>Partner</div>
+                    )}
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        );
+      }
+
 
       function App(){
         const params=new URLSearchParams(window.location.search);
@@ -191,18 +368,19 @@
               <header aria-label="Site header">
                 <div className="brand">
                   <img className="logo" src="logo.png" alt="Institute of Astro-ekistics logo" />
-                  <div className="title">Institute of Astro-ekistics</div>
+                  <div className="title">The Institute of Astro-ekistics</div>
                 </div>
                 <section className="hero" aria-label="Hero">
                   <div className="hero-inner">
                     <div>
                       <div className="kicker">Designing for life beyond Earth</div>
-                      <h1 className="hero-h">Ecological Systems for Sustainable Human Settlement</h1>
+                      <h1 className="hero-h">Sustainable Systems for Human Settlement</h1>
                       <p className="hero-p">
-                        We develop closed-loop, regenerative systems that enable self-sufficient life in space—and strengthen ecological resilience on Earth.
+                        A foundation for life that endures — on Earth and at the frontier.
                       </p>
                       <GradientRule mt={16} mb={0}/>
                     </div>
+
                     <div className="hero-badge">
                       <PartnerBadge pct={pct}/>
                     </div>
@@ -229,26 +407,25 @@
                 <section className="card" aria-labelledby="journal">
                   <h2 id="journal">Astro-ekistics Journal</h2>
                   <p>
-                    An open-access, hybrid publication combining community contribution with volunteer peer review.
-                    A living record of ecological settlement science—from regenerative agriculture and closed habitats
-                    to analogue settlement research and sustainable technologies.
+                    The Journal of Astro-ekistics is an open-access, hybrid publication that welcomes community submissions and marks peer-reviewed work clearly. It serves as a living record of ecological settlement science—from regenerative agriculture and closed-loop habitats to analogue settlements and enabling technologies.
                   </p>
                 </section>
 
                 <section className="card" aria-labelledby="transparency">
                   <h2 id="transparency">Transparency & Licensing</h2>
                   <p>
-                    We release all outputs under strong copyleft licenses to protect the commons:
-                    articles under Creative Commons BY-SA, software under GNU GPL/AGPL, and hardware under CERN OHL.
-                    This keeps discoveries open, verifiable, and reusable.
+                    Transparency is core to our work. All outputs remain in the commons:
+                    articles and datasets under <strong>CC BY-SA</strong>, software under
+                    <strong>GNU GPL/AGPL</strong>, and hardware &amp; habitat designs under
+                    <strong>CERN OHL</strong>. Strong copyleft keeps the work accessible,
+                    auditable, and reusable—preventing enclosure and ensuring public benefit.
                   </p>
                 </section>
 
                 <section className="card" aria-labelledby="governance">
                   <h2 id="governance">Funding & Governance</h2>
                   <p>
-                    Early support comes from aerospace partners and private donors, growing into grants and mission-aligned revenue.
-                    A board-oversight and Principal Investigator model ensures accountability and alignment with our mission.
+                    Early support comes from aerospace partners and private donors, expanding to foundation and federal research grants. Governance follows a Principal Investigator model with board-approved budgets to keep spending accountable and aligned with outcomes.
                   </p>
                 </section>
 
@@ -256,16 +433,16 @@
                   <h2 id="roadmap">Roadmap</h2>
                   <div className="timeline">
                     <TimelineItem title="Year 1">
-                      Incorporation, nonprofit filing, open database launch, and journal framework.
+                      Incorporation, 501(c)(3) filing, open database launched, journal framework established.
                     </TimelineItem>
                     <TimelineItem title="Year 2">
-                      First journal issue, pilot projects, analogue settlement design.
+                      First journal issue, pilot projects initiated, analogue settlement design.
                     </TimelineItem>
                     <TimelineItem title="Year 3">
-                      Test modules for analogue settlements, first interns, public workshop.
+                      Settlement test modules constructed, first interns hosted, public workshop held.
                     </TimelineItem>
                     <TimelineItem title="Years 4–5">
-                      Expanded analogue settlement with live-in research, university partnerships, federal research grants.
+                      Expanded analogue settlement with live-in research, university partnerships, pursuit of federal research grants.
                     </TimelineItem>
                   </div>
                 </section>
@@ -276,11 +453,20 @@
                     <PartnerBadge pct={pct}/>
                   </div>
                   <p style={{marginTop:10}}>
-                    The Aerospace Commitment Pledge Seal recognizes companies that commit a percentage of their annual
-                    charitable contributions to the Institute—transparent, verifiable dedication to sustainable human
-                    settlement and ecological resilience.
+                  The Patron Seal of Astro-ekistics is awarded to companies that dedicate a verifiable portion of their annual charitable giving to the Institute of Astro-ekistics. Unlike symbolic endorsements, the Seal represents a documented, audited investment in humanity’s long-term survival.
+                  Displaying the Seal signals that a company’s resources are actively advancing research in regenerative life-support systems, closed-loop habitats, and ecological resilience strategies. Each Seal is marked with the organization’s pledged percentage, ensuring transparency and accountability.
+                  By participating, companies demonstrate leadership on the dual frontier: enabling self-sufficient human life beyond Earth while strengthening ecological sustainability on Earth today.
                   </p>
                 </section>
+
+                <section className="card" aria-labelledby="partners">
+                  <h2 id="partners">Partners</h2>
+                  <p className="subtle">
+                    Organizations displaying the Patron Seal of Astro-ekistics have dedicated a verifiable share of annual giving to this work.
+                  </p>
+                  <PartnerGrid/>
+                </section>
+
               </main>
 
               <footer>© {new Date().getFullYear()} Institute of Astro-ekistics</footer>
